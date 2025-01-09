@@ -1,0 +1,21 @@
+name: java maven based workflow
+on:
+ push
+jobs:
+ echo-trigger: 
+  runs-on: ubuntu-latest
+  steps:
+   - name: checkout
+     uses: action/checkout@v1
+   - name: javasetup  
+     uses: actions/setup-java@4.6.0
+     with:
+      dependencies: 'microsoft'
+      java-version: '17'
+   - run: mvn --batch-mode --update-snapshots verify
+   - run: mkdir staging && target/*.jar staging
+   - uses: actions/upload-artifact@v4.5.0
+     with:
+      name: package
+      path: staging
+      
